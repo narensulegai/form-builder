@@ -1,0 +1,18 @@
+.formElement {
+  margin: 10px 20px;
+  color: var(--base-color);
+
+  input[type="text"] {
+    height: 2em;
+    width: 200px;
+    margin: 5px 0;
+    border: 1px solid var(--base-color);
+    border-radius: 5px;
+    padding-left: 10px;
+  }
+}
+
+.err {
+  font-size: small;
+  color: var(--error-message-color);
+}

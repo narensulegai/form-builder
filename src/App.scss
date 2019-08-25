@@ -1,0 +1,25 @@
+:root {
+  --main-bg-color: #eee9e4;
+  --error-message-color: red;
+  --base-color: #0000ff;
+}
+
+.row {
+  border: 2px solid red;
+  display: block;
+}
+
+.col {
+  border: 2px solid black;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.subContent {
+  margin-left: 20px;
+}
+
+.appContainer {
+  background-color: var(--main-bg-color);
+  min-height: 100vh;
+}
