@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import Building from "./Building";
 
 const ConditionalRender = function ({widget, item, level, context}) {
-  const hideIf = item.hideIf ? item.hideIf : () => false;
+  const showOn = item.showOn ? item.showOn : () => true;
 
-  const [isVisible, setVisibility] = useState(!hideIf(context.getData()));
+  const [isVisible, setVisibility] = useState(showOn(context.getData()));
   //TODO: remove listener when component un-mounts
   context.onChange((data) => {
-    setVisibility(!hideIf(data));
+    setVisibility(showOn(data));
   });
 
   const onChange = (val) => {

@@ -13,8 +13,8 @@ const content = {
     {
       widget: 'NonEmptyInputBox',
       options: {label: 'Name'},
-      hideIf: (data) => {
-        return data.main[0] === null;
+      showOn: (data) => {
+        return data.main[0] !== null;
       }
     }
   ]
