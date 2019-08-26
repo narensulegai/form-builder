@@ -6,7 +6,7 @@ const ConditionalRender = function ({widget, item, level, context}) {
   const hideIf = item.hideIf ? item.hideIf : () => false;
 
   const [isVisible, setVisibility] = useState(!hideIf(context.getData()));
-
+  //TODO: remove listener when component un-mounts
   context.onChange((data) => {
     setVisibility(!hideIf(data));
   });
@@ -16,7 +16,7 @@ const ConditionalRender = function ({widget, item, level, context}) {
   };
   const text = context.getValue(level);
 
-  const newWidget = React.cloneElement(widget, {text, onChange, ...item.options});
+  const newWidget = React.cloneElement(widget(text, onChange), {...item.options});
 
   return isVisible ? newWidget : null;
 };
@@ -25,25 +25,31 @@ ConditionalRender.propTypes = {};
 
 ConditionalRender.defaultProps = {};
 
-export default {
-  EmailInputBox: (item, index, level, context) => {
-    //TODO: create wrapper with better abstraction
+const wrapWidgets = (widgets) => {
+  const wrappedWidgets = {};
+  for (let key in widgets) {
+    const widget = widgets[key];
+    wrappedWidgets[key] = (item, index, level, context) => {
+      return <ConditionalRender key={index}
+                                level={level}
+                                item={item}
+                                context={context}
+                                widget={widget}/>;
+    }
+  }
+  return wrappedWidgets;
+};
 
-    return <ConditionalRender key={index}
-                              level={level}
-                              item={item}
-                              context={context}
-                              widget={<InputBox pattern={'email'}/>}/>
-
+//Define your widgets here -
+//value will contain the initialization value of the component,
+//this value must be updated using onValueChange function
+const widgets = {
+  EmailInputBox: (value, onValueChange) => {
+    return <InputBox text={value} pattern={'email'} onChange={onValueChange}/>;
   },
-  NonEmptyInputBox: (item, index, level, context) => {
-    //TODO: create wrapper with better abstraction
-
-    return <ConditionalRender key={index}
-                              level={level}
-                              item={item}
-                              context={context}
-                              widget={<InputBox pattern={'nonEmpty'}/>}/>
-
+  NonEmptyInputBox: (value, onValueChange) => {
+    return <InputBox text={value} pattern={'nonEmpty'} onChange={onValueChange}/>;
   }
 };
+
+export default wrapWidgets(widgets);
