@@ -5,8 +5,12 @@ export const content = {
   container: 'row',
   items: [
     {
-      widget: 'NonEmptyInputBox',
-      options: {label: 'Name'},
+      widget: 'Building',
+      options: {}
+    },
+    {
+      widget: 'EmailInputBox',
+      options: {label: 'Email'},
     },
     {
       content: {

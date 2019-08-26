@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import InputBox from "./InputBox";
 import PropTypes from 'prop-types'
+import Building from "./Building";
 
 const ConditionalRender = function ({widget, item, level, context}) {
   const hideIf = item.hideIf ? item.hideIf : () => false;
@@ -49,6 +50,9 @@ const widgets = {
   },
   NonEmptyInputBox: (value, onValueChange) => {
     return <InputBox text={value} pattern={'nonEmpty'} onChange={onValueChange}/>;
+  },
+  Building:(value, onValueChange) => {
+    return <Building init={value} onChange={onValueChange}/>
   }
 };
 
