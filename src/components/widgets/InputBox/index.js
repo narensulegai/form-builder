@@ -1,11 +1,18 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import './index.scss';
 
 const patterns = {
   nonEmpty: {regx: /.+/g, message: 'Can\'t be empty'},
   email: {regx: /.+@.+\..+/g, message: 'Invalid email'}
+};
+
+const validate = (text, pattern) => {
+  let errMsg = null;
+  if (text.match(patterns[pattern].regx) === null) {
+    errMsg = patterns[pattern].message;
+  }
+  return errMsg;
 };
 
 InputBox.propTypes = {
@@ -26,27 +33,13 @@ InputBox.defaultProps = {
 
 function InputBox(props) {
 
-  const [text, setText] = useState(props.text);
-  const [error, setError] = useState(null);
-
-  const validate = (text) => {
-    let errMsg = null;
-    if (text.match(patterns[props.pattern].regx) === null) {
-      errMsg = patterns[props.pattern].message;
-    }
-    return errMsg;
-  };
+  const [error, setError] = useState(props.text === null ? null : validate(props.text, props.pattern));
 
   const handleTextChange = (e) => {
     const text = e.target.value;
-    const errMsg = validate(text);
-    setError(errMsg);
-  };
-
-  const handleOnBlur = (e) => {
-    const text = e.target.value;
-    const errMsg = validate(text);
+    const errMsg = validate(text, props.pattern);
     props.onChange(errMsg === null ? text : null);
+    setError(errMsg);
   };
 
   return (
@@ -54,9 +47,8 @@ function InputBox(props) {
       <div>{props.label}</div>
       <input type={'text'}
              autoComplete="no-fill"
-             defaultValue={text}
-             onChange={handleTextChange}
-             onBlur={handleOnBlur}/>
+             defaultValue={props.text}
+             onChange={handleTextChange}/>
       <div className="err">{error}</div>
     </div>
   );

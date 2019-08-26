@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import widgets from '../widgets';
 
@@ -19,9 +19,7 @@ function FormGen(props) {
                             content={item.content}
                             level={level}/>
           } else {
-            return widgets[item.widget](item.options, j, (val) => {
-              props.formContext.setValue(level, val);
-            })
+            return widgets[item.widget](item, j, level, props.formContext)
           }
         }
       )}

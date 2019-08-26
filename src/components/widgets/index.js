@@ -1,27 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
 import InputBox from "./InputBox";
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-ValueSync.propTypes = {};
+const ConditionalRender = function ({widget, item, level, context}) {
+  const hideIf = item.hideIf ? item.hideIf : () => false;
 
-function ValueSync(props) {
-  return (
-    <div></div>
-  );
-}
+  const [isVisible, setVisibility] = useState(!hideIf(context.getData()));
 
+  context.onChange((data) => {
+    setVisibility(!hideIf(data));
+  });
+
+  const onChange = (val) => {
+    context.setValue(level, val);
+  };
+  const text = context.getValue(level);
+
+  const newWidget = React.cloneElement(widget, {text, onChange, ...item.options});
+
+  return isVisible ? newWidget : null;
+};
+
+ConditionalRender.propTypes = {};
+
+ConditionalRender.defaultProps = {};
 
 export default {
-  EmailInputBox: (options, index, set) => {
-    const onChange = (val) => {
-      set(val)
-    };
-    return <InputBox key={index} pattern="email" label="Enter Email" onChange={onChange} {...options}/>
+  EmailInputBox: (item, index, level, context) => {
+    //TODO: create wrapper with better abstraction
+
+    return <ConditionalRender key={index}
+                              level={level}
+                              item={item}
+                              context={context}
+                              widget={<InputBox pattern={'email'}/>}/>
+
   },
-  NonEmptyInputBox: (options, index, set) => {
-    const onChange = (val) => {
-      set(val)
-    };
-    return <InputBox key={index} pattern="nonEmpty" label="Enter" onChange={onChange} {...options}/>
+  NonEmptyInputBox: (item, index, level, context) => {
+    //TODO: create wrapper with better abstraction
+
+    return <ConditionalRender key={index}
+                              level={level}
+                              item={item}
+                              context={context}
+                              widget={<InputBox pattern={'nonEmpty'}/>}/>
+
   }
 };

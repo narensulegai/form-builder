@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from './components/Form';
-import {content} from './settings';
+import {content, data} from './settings';
 import './App.scss';
 
 function App() {
@@ -10,7 +10,9 @@ function App() {
   return (
     <div className="app">
       <div className="appContainer">
-        <Form content={content} onChange={onChange}/>
+        <Form content={content}
+              init={data}
+              onChange={onChange}/>
       </div>
     </div>
   );

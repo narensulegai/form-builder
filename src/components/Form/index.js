@@ -5,12 +5,13 @@ import FormContext from "./FormContext";
 
 Form.propTypes = {
   content: PropTypes.any,
+  init: PropTypes.any,
   onChange: PropTypes.func
 };
 
 function Form(props) {
 
-  const formContext = new FormContext();
+  const formContext = new FormContext(props.init);
   formContext.onChange((tree) => {
     props.onChange(tree);
   });

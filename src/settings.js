@@ -4,7 +4,7 @@ export const content = {
   items: [
     {
       widget: 'NonEmptyInputBox',
-      options: {label: 'Name'}
+      options: {label: 'Name'},
     },
     {
       content: {
@@ -13,11 +13,10 @@ export const content = {
         items: [
           {
             widget: 'NonEmptyInputBox',
-            options: {label: 'Name'}
-          },
-          {
-            widget: 'EmailInputBox',
-            options: {label: 'Email'}
+            options: {label: 'Name'},
+            hideIf: (data) => {
+              return !data.main[0];
+            }
           }
         ]
       }
@@ -25,3 +24,6 @@ export const content = {
   ]
 };
 
+export const data = {
+  main: ['', {columns: ['def']}]
+};
