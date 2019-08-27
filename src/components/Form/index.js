@@ -2,6 +2,7 @@ import React from 'react';
 import FormGen from "../FormGen";
 import PropTypes from 'prop-types';
 import FormContext from "./FormContext";
+import {defaultData} from "../../services/settings/util";
 
 Form.propTypes = {
   content: PropTypes.any,
@@ -10,16 +11,15 @@ Form.propTypes = {
 };
 
 function Form(props) {
-
-  const formContext = new FormContext(props.init);
-  formContext.onChange((tree) => {
-    props.onChange(tree);
+  const init = props.init ? props.init : defaultData(props.content);
+  const formContext = new FormContext(init);
+  formContext.onChange((data) => {
+    props.onChange(data);
   });
 
   return (
     <FormGen formContext={formContext}
-             content={props.content}
-             level={[props.content.name]}/>
+             content={props.content}/>
   );
 }
 

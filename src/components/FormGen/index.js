@@ -10,16 +10,12 @@ function FormGen(props) {
   return (
     <div className={`${props.content.container} subContent`}>
       {props.content.items.map((item, j) => {
-          const level = props.level.slice(0);
-          level.push(j);
           if (item.content) {
-            level.push(item.content.name);
             return <FormGen key={j}
                             formContext={props.formContext}
-                            content={item.content}
-                            level={level}/>
+                            content={item.content}/>
           } else {
-            return widgets[item.widget](item, j, level, props.formContext)
+            return widgets[item.widget](item, j, props.formContext)
           }
         }
       )}

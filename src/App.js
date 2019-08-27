@@ -1,18 +1,20 @@
 import React from 'react';
 import Form from './components/Form';
-import {content, data} from './settings';
+import {content} from './services/settings';
 import './App.scss';
+
+const dataFromDB = {email1: 'naren@gmail.com', name1: 'Naren'};
 
 function App() {
 
-  let tree = null;
+  let data = null;
 
   const onChange = (t) => {
-    tree = t;
+    data = t;
   };
 
   const handleOnSave = () => {
-    console.log(tree)
+    console.log(data)
   };
 
   return (
@@ -20,7 +22,7 @@ function App() {
       <div className="appContainer">
 
         <Form content={content}
-              init={data}
+              init={dataFromDB}
               onChange={onChange}/>
 
         <button onClick={handleOnSave}>Save</button>

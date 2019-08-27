@@ -3,19 +3,20 @@ import InputBox from "./InputBox";
 import PropTypes from 'prop-types'
 import Building from "./Building";
 
-const ConditionalRender = function ({widget, item, level, context}) {
+const ConditionalRender = function ({widget, item, context}) {
+  const key = item.name;
   const showOn = item.showOn ? item.showOn : () => true;
 
-  const [isVisible, setVisibility] = useState(showOn(context.getData()));
+  const [isVisible, setVisibility] = useState(showOn(context.getKeys()));
   //TODO: remove listener when component un-mounts
-  context.onChange((data) => {
-    setVisibility(showOn(data));
+  context.onChange((keys) => {
+    setVisibility(showOn(keys));
   });
 
   const onChange = (val) => {
-    context.setValue(level, val);
+    context.setKey(key, val);
   };
-  const text = context.getValue(level);
+  const text = context.getKey(key);
 
   const newWidget = React.cloneElement(widget(text, onChange), {...item.options});
 
@@ -30,9 +31,8 @@ const wrapWidgets = (widgets) => {
   const wrappedWidgets = {};
   for (let key in widgets) {
     const widget = widgets[key];
-    wrappedWidgets[key] = (item, index, level, context) => {
+    wrappedWidgets[key] = (item, index, context) => {
       return <ConditionalRender key={index}
-                                level={level}
                                 item={item}
                                 context={context}
                                 widget={widget}/>;

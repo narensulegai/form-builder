@@ -1,19 +1,18 @@
 import _ from 'lodash';
 
 export default function (data) {
-  let tree = _.cloneDeep(data);
   const callbacks = [];
+  let keys = _.clone(data);
 
-  this.getData = () => {
-    return tree;
+  this.getKeys = () => {
+    return keys;
   };
-  this.setValue = (level, val) => {
-    _.set(tree, level.join('.'), val);
-    callbacks.map(c => c(tree));
+  this.setKey = (key, val) => {
+    keys[key] = val;
+    callbacks.map(c => c(keys));
   };
-
-  this.getValue = (level) => {
-    return _.get(tree, level.join('.'));
+  this.getKey = (key) => {
+    return keys[key];
   };
 
   this.onChange = (callback) => {
