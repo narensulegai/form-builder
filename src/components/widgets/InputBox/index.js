@@ -47,7 +47,7 @@ function InputBox(props) {
       <div>{props.label}</div>
       <input type={'text'}
              autoComplete="no-fill"
-             defaultValue={props.text}
+             value={props.text || ''}
              onChange={handleTextChange}/>
       <div className="err">{error}</div>
     </div>

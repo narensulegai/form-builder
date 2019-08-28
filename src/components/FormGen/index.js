@@ -15,7 +15,7 @@ function FormGen(props) {
                             formContext={props.formContext}
                             content={item.content}/>
           } else {
-            return widgets[item.widget](item, j, props.formContext)
+            return <div key={j}>{widgets[item.widget](item, j, props.formContext)}</div>
           }
         }
       )}

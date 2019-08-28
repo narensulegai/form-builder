@@ -27,9 +27,8 @@ Building.propTypes = {
 };
 
 function Building(props) {
-  const data = props.init;
   return (
-    <Form content={content} init={data} onChange={props.onChange}/>
+    <Form content={content} init={props.init} onChange={props.onChange}/>
   );
 }
 

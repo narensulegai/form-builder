@@ -3,7 +3,12 @@ export const content = {
   items: [
     {
       name: 'email1',
-      widget: 'EmailInputBox',
+      widget: 'NonEmptyInputBox',
+      options: {label: 'Email'},
+    },
+    {
+      name: 'email1',
+      widget: 'NonEmptyInputBox',
       options: {label: 'Email'},
     },
     {

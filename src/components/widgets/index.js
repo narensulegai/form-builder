@@ -3,39 +3,39 @@ import InputBox from "./InputBox";
 import PropTypes from 'prop-types'
 import Building from "./Building";
 
-const ConditionalRender = function ({widget, item, context}) {
-  const key = item.name;
-  const showOn = item.showOn ? item.showOn : () => true;
+/**
+ * @return {null}
+ */
+const withConditionalRender = function (item, index, context, Widget) {
+  function Wd(props) {
+    const key = item.name;
 
-  const [isVisible, setVisibility] = useState(showOn(context.getKeys()));
-  //TODO: remove listener when component un-mounts
-  context.onChange((keys) => {
-    setVisibility(showOn(keys));
-  });
+    const showOn = item.showOn ? item.showOn : () => true;
+    const [isVisible, setVisibility] = useState(showOn(context.getKeys()));
+    const [value, setValue] = useState(context.getKey(key));
 
-  const onChange = (val) => {
-    context.setKey(key, val);
-  };
-  const text = context.getKey(key);
+    //TODO: remove listener when component un-mounts
+    context.onChange((keys) => {
+      setValue(keys[key]);
+      setVisibility(showOn(keys));
+    });
 
-  const newWidget = React.cloneElement(widget(text, onChange), {...item.options});
+    const onChange = (val) => {
+      context.setKey(key, val);
+    };
 
-  return isVisible ? newWidget : null;
+    return isVisible ? <Widget value={value} onValueChange={onChange} context={context} {...item.options}/> : null;
+  }
+
+  return <Wd/>;
 };
-
-ConditionalRender.propTypes = {};
-
-ConditionalRender.defaultProps = {};
 
 const wrapWidgets = (widgets) => {
   const wrappedWidgets = {};
   for (let key in widgets) {
-    const widget = widgets[key];
+    const Widget = widgets[key];
     wrappedWidgets[key] = (item, index, context) => {
-      return <ConditionalRender key={index}
-                                item={item}
-                                context={context}
-                                widget={widget}/>;
+      return withConditionalRender(item, index, context, Widget);
     }
   }
   return wrappedWidgets;
@@ -45,14 +45,17 @@ const wrapWidgets = (widgets) => {
 //value will contain the initialization value of the component,
 //this value must be updated using onValueChange function
 const widgets = {
-  EmailInputBox: (value, onValueChange) => {
-    return <InputBox text={value} pattern={'email'} onChange={onValueChange}/>;
+  EmailInputBox: (props) => {
+    return <InputBox text={props.value} pattern={'email'} onChange={props.onValueChange} {...props}/>;
   },
-  NonEmptyInputBox: (value, onValueChange) => {
-    return <InputBox text={value} pattern={'nonEmpty'} onChange={onValueChange}/>;
+  NonEmptyInputBox: (props) => {
+    return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props}/>;
   },
-  Building:(value, onValueChange) => {
-    return <Building init={value} onChange={onValueChange}/>
+  BuildingWidget: (props) => {
+    return <Building
+      value={props.value}
+      onChange={props.onValueChange}
+    />
   }
 };
 
