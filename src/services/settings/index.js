@@ -1,27 +1,68 @@
 export const content = {
+  isRepeatable: true,
   container: 'row',
   items: [
     {
-      name: 'email1',
-      widget: 'NonEmptyInputBox',
-      options: {label: 'Email'},
+      content: {
+        container: 'col summary',
+        items: [{
+          name: 'BuildingSummary',
+          widget: 'BuildingSummary',
+          options: {
+            label: 'Building Summary',
+            data: [
+              {label: 'Street Address', value: 'StreetAddress'},
+              {label: 'Suite', value: 'Suite'}
+            ]
+          }
+        }]
+      }
     },
     {
-      name: 'email1',
-      widget: 'NonEmptyInputBox',
-      options: {label: 'Email'},
+      content: {
+        container: 'col',
+        items: [{
+          name: 'BuildingDescription',
+          widget: 'InputBox',
+          options: {label: 'Building description'}
+        }]
+      }
     },
     {
       content: {
         container: 'col',
         items: [
           {
-            name: 'name1',
-            widget: 'NonEmptyInputBox',
-            options: {label: 'Name'},
-            showOn: ({email1}) => {
-              return email1 !== null;
-            }
+            name: 'StreetAddress',
+            widget: 'InputBox',
+            options: {label: 'Street Address'},
+          },
+          {
+            name: 'Suite',
+            widget: 'InputBox',
+            options: {label: 'Suite'},
+          },
+          {
+            name: 'City',
+            widget: 'InputBox',
+            options: {label: 'City'},
+          }
+        ]
+      }
+    },
+    {
+      content: {
+        container: 'col',
+        items: [
+          {
+            name: 'State',
+            widget: 'InputBox',
+            options: {label: 'State'},
+          },
+          {
+            name: 'ZipCode',
+            widget: 'InputBox',
+            options: {label: 'Zip Code'},
           }
         ]
       }

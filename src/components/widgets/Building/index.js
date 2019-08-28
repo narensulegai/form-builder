@@ -1,34 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import Form from "../../Form";
 
-const content = {
-  container: 'row',
-  items: [
-    {
-      name: 'BuildingEmail',
-      widget: 'EmailInputBox',
-      options: {label: 'Email'},
-    },
-    {
-      name: 'BuildingName',
-      widget: 'NonEmptyInputBox',
-      options: {label: 'Name'},
-      showOn: ({BuildingEmail}) => {
-        return BuildingEmail !== null;
-      }
-    }
-  ]
-};
+Building.propTypes = {};
 
-Building.propTypes = {
-  onChange: PropTypes.func,
-  init: PropTypes.any
+const getValuesFromContext = (context, data) => {
+  const allKeys = context.getKeys();
+  return data.map(d => {
+    return {label: d.label, currValue: allKeys[d.value]}
+  })
 };
 
 function Building(props) {
+
+  const [values, setValues] = useState(getValuesFromContext(props.context, props.data));
+
+  props.context.onChange(() => {
+    setValues(getValuesFromContext(props.context, props.data));
+  });
+
   return (
-    <Form content={content} init={props.init} onChange={props.onChange}/>
+    <div className="subContent">
+      <h4>{props.label}</h4>
+      {values.map((d, i) => {
+        return <div className="col" key={i}>
+          <div>{d.label}</div>
+          <i>&nbsp;&nbsp;{d.currValue}</i>
+        </div>
+      })}
+    </div>
   );
 }
 

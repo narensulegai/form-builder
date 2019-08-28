@@ -13,3 +13,14 @@
 .appContainer {
   height: 100vh;
 }
+
+.summary {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--base-color);
+  margin-right: 20px;
+
+  h4 {
+    margin: 0;
+  }
+}

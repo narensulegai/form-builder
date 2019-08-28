@@ -6,7 +6,7 @@ import Building from "./Building";
 /**
  * @return {null}
  */
-const withConditionalRender = function (item, index, context, Widget) {
+const withConditionalRender = function (item, context, Widget) {
   function Wd(props) {
     const key = item.name;
 
@@ -34,8 +34,8 @@ const wrapWidgets = (widgets) => {
   const wrappedWidgets = {};
   for (let key in widgets) {
     const Widget = widgets[key];
-    wrappedWidgets[key] = (item, index, context) => {
-      return withConditionalRender(item, index, context, Widget);
+    wrappedWidgets[key] = (item, context) => {
+      return withConditionalRender(item, context, Widget);
     }
   }
   return wrappedWidgets;
@@ -48,14 +48,11 @@ const widgets = {
   EmailInputBox: (props) => {
     return <InputBox text={props.value} pattern={'email'} onChange={props.onValueChange} {...props}/>;
   },
-  NonEmptyInputBox: (props) => {
+  InputBox: (props) => {
     return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props}/>;
   },
-  BuildingWidget: (props) => {
-    return <Building
-      value={props.value}
-      onChange={props.onValueChange}
-    />
+  BuildingSummary: (props) => {
+    return <Building value={props.value} onChange={props.onValueChange} context={props.context} {...props} />
   }
 };
 

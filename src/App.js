@@ -3,7 +3,7 @@ import Form from './components/Form';
 import {content} from './services/settings';
 import './App.scss';
 
-const dataFromDB = {email1: 'naren@gmail.com', name1: 'Naren'};
+const dataFromDB = {};
 
 function App() {
 

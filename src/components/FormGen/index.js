@@ -6,6 +6,16 @@ FormGen.propTypes = {
   content: PropTypes.any
 };
 
+function withWidgetRenderer(item, j, formContext) {
+  const Widget = widgets[item.widget](item, formContext);
+
+  function WidgetContainer() {
+    return <div key={j}>{Widget}</div>
+  }
+
+  return <WidgetContainer/>;
+}
+
 function FormGen(props) {
   return (
     <div className={`${props.content.container} subContent`}>
@@ -15,7 +25,7 @@ function FormGen(props) {
                             formContext={props.formContext}
                             content={item.content}/>
           } else {
-            return <div key={j}>{widgets[item.widget](item, j, props.formContext)}</div>
+            return <div key={j}>{withWidgetRenderer(item, j, props.formContext)}</div>
           }
         }
       )}
