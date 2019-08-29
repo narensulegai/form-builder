@@ -1,5 +1,16 @@
+import Form from './../../components/Form';
+
+export const customWidgets = {
+  widgetName: 'Summary',
+  container: 'col summary',
+  items: [
+    {
+      name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}
+    }
+  ]
+};
+
 export const content = {
-  isRepeatable: true,
   container: 'row',
   items: [
     {
@@ -20,49 +31,35 @@ export const content = {
     },
     {
       content: {
-        container: 'col',
-        items: [{
-          name: 'BuildingDescription',
-          widget: 'InputBox',
-          options: {label: 'Building description'}
-        }]
-      }
-    },
-    {
-      content: {
-        container: 'col',
+        renderer: {type: 'Form'},
+        container: 'row',
         items: [
           {
-            name: 'StreetAddress',
-            widget: 'InputBox',
-            options: {label: 'Street Address'},
+            content: {
+              container: 'col',
+              items: [
+                {name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}}
+              ]
+            }
           },
           {
-            name: 'Suite',
-            widget: 'InputBox',
-            options: {label: 'Suite'},
+            content: {
+              container: 'col',
+              items: [
+                {name: 'StreetAddress', widget: 'InputBox', options: {label: 'Street Address'}},
+                {name: 'Suite', widget: 'InputBox', options: {label: 'Suite'}},
+                {name: 'City', widget: 'InputBox', options: {label: 'City'}}
+              ]
+            }
           },
           {
-            name: 'City',
-            widget: 'InputBox',
-            options: {label: 'City'},
-          }
-        ]
-      }
-    },
-    {
-      content: {
-        container: 'col',
-        items: [
-          {
-            name: 'State',
-            widget: 'InputBox',
-            options: {label: 'State'},
-          },
-          {
-            name: 'ZipCode',
-            widget: 'InputBox',
-            options: {label: 'Zip Code'},
+            content: {
+              container: 'col',
+              items: [
+                {name: 'State', widget: 'InputBox', options: {label: 'State'}},
+                {name: 'ZipCode', widget: 'InputBox', options: {label: 'Zip Code'}}
+              ]
+            }
           }
         ]
       }

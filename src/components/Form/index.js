@@ -3,6 +3,7 @@ import FormGen from "../FormGen";
 import PropTypes from 'prop-types';
 import FormContext from "./FormContext";
 import {defaultData} from "../../services/settings/util";
+import _ from 'lodash';
 
 Form.propTypes = {
   content: PropTypes.any,
@@ -11,8 +12,10 @@ Form.propTypes = {
 };
 
 function Form(props) {
-  const init = props.init ? props.init : defaultData(props.content);
-  const formContext = new FormContext(init);
+
+  const data = _.extend(defaultData(props.content), props.init);
+
+  const formContext = new FormContext(data);
   formContext.onChange((data) => {
     props.onChange(data);
   });
