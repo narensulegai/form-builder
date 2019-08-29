@@ -9,7 +9,7 @@ export const customWidgets = {
   }
 };
 
-export const content = {
+export const content1 = {
   container: 'col',
   items: [
     {name: 'CustomWidgetKey', widget: 'Summary', options: {label: 'Street Address'}},
@@ -17,7 +17,7 @@ export const content = {
   ]
 };
 
-export const content1 = {
+export const content = {
   container: 'row',
   items: [
     {

@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
 import {FormContext} from "../Form/FormContext";
+import _ from 'lodash';
 
 const extractNames = (content, names = []) => {
-  console.log(content);
   content.items.forEach(i => {
     if (i.items) {
       names = [...names, ...content.items.map(e => e.name)];
@@ -19,7 +19,12 @@ export default {
     const context = useContext(FormContext);
 
     const handleOnContinue = () => {
+      //TODO: check for keys in the form only
+      const isInValid = _.some(_.values(context.getKeys()), (e) => e === null);
       console.log(context.getKeys());
+      if (isInValid) {
+        alert('Form is invalid');
+      }
     };
     return <div className="formBackground">
       <Content/>

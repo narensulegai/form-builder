@@ -13,6 +13,7 @@ function Wd(props) {
   const showOn = props.item.showOn ? props.item.showOn : () => true;
   const context = useContext(FormContext);
   const [value, setValue] = useState(context.getKeys()[key]);
+  const [isVisible, setVisibility] = useState(showOn(context.getKeys()[key]));
 
   const onChange = (val) => {
     context.setKey(key, val)
@@ -21,9 +22,10 @@ function Wd(props) {
   if (!props.isCustom) { //To fix a strange issue of input box losing focus when the outer component gets re-rendered
     context.onChange((keys) => {
       setValue(keys[key]);
+      setVisibility(showOn(context.getKeys()[key]));
     });
   }
-  return React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options});
+  return isVisible ? React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options}) : null;
 }
 
 const wrapWidgets = (widgets, isCustom = false) => {
