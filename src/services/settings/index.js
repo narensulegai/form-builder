@@ -38,7 +38,7 @@ export const content = {
     },
     {
       content: {
-        renderer: {type: 'Form'},
+        renderer: {type: 'Form', options: {validate: ['BuildingDescription']}},
         container: 'row',
         items: [
           {

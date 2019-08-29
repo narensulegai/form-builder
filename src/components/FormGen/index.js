@@ -13,7 +13,7 @@ function withContentRenderer(content) {
   }
 
   return content.renderer
-    ? ContentRenderer[content.renderer.type](Form, content, content.renderer.type.options)
+    ? ContentRenderer[content.renderer.type](Form, content, content.renderer.options)
     : <Form/>;
 }
 

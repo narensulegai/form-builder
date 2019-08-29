@@ -17,10 +17,9 @@ export default {
   Form: function (Content, content, options = {}) {
     // console.log('back', formContext, content);
     const context = useContext(FormContext);
-
     const handleOnContinue = () => {
       //TODO: check for keys in the form only
-      const isInValid = _.some(_.values(context.getKeys()), (e) => e === null);
+      const isInValid = _.some(_.values(_.pick(context.getKeys(), options.validate)), (e) => e === null);
       console.log(context.getKeys());
       if (isInValid) {
         alert('Form is invalid');
