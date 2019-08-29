@@ -1,16 +1,23 @@
-import Form from './../../components/Form';
-
 export const customWidgets = {
-  widgetName: 'Summary',
-  container: 'col summary',
-  items: [
-    {
-      name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}
-    }
-  ]
+  Summary: {
+    container: 'col',
+    items: [
+      {
+        name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}
+      }
+    ]
+  }
 };
 
 export const content = {
+  container: 'col',
+  items: [
+    {name: 'CustomWidgetKey', widget: 'Summary', options: {label: 'Street Address'}},
+    {name: 'CustomWidgetKey1', widget: 'Summary', options: {label: 'Street Address'}},
+  ]
+};
+
+export const content1 = {
   container: 'row',
   items: [
     {
