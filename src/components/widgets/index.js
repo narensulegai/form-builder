@@ -1,41 +1,35 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import InputBox from "./InputBox";
 import PropTypes from 'prop-types'
 import Building from "./Building";
+import {FormContext} from "../Form/FormContext";
+import CustomWidget from "./CustomWidget";
+import _ from 'lodash';
 
-/**
- * @return {null}
- */
-const withConditionalRender = function (item, context, Widget) {
-  function Wd(props) {
-    const key = item.name;
+function Wd(props) {
 
-    const showOn = item.showOn ? item.showOn : () => true;
-    const [isVisible, setVisibility] = useState(showOn(context.getKeys()));
-    const [value, setValue] = useState(context.getKey(key));
+  const key = props.item.name;
+  const showOn = props.item.showOn ? props.item.showOn : () => true;
 
-    //TODO: remove listener when component un-mounts
-    context.onChange((keys) => {
-      setValue(keys[key]);
-      setVisibility(showOn(keys));
-    });
+  const context = useContext(FormContext);
+  const [value, setValue] = useState(context.getKeys()[key]);
 
-    const onChange = (val) => {
-      context.setKey(key, val);
-    };
-
-    return isVisible ? <Widget value={value} onValueChange={onChange} context={context} {...item.options}/> : null;
-  }
-
-  return <Wd/>;
-};
+  const onChange = (val) => {
+    context.setKey(key, val)
+  };
+  //TODO:remove callback on unmount
+  context.onChange((keys) => {
+    setValue(keys[key]);
+  });
+  return React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options});
+}
 
 const wrapWidgets = (widgets) => {
   const wrappedWidgets = {};
   for (let key in widgets) {
     const Widget = widgets[key];
-    wrappedWidgets[key] = (item, context) => {
-      return withConditionalRender(item, context, Widget);
+    wrappedWidgets[key] = (item) => {
+      return <Wd item={item} Widget={Widget}/>;
     }
   }
   return wrappedWidgets;
@@ -52,7 +46,10 @@ const widgets = {
     return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props}/>;
   },
   BuildingSummary: (props) => {
-    return <Building value={props.value} onChange={props.onValueChange} context={props.context} {...props} />
+    return <Building value={props.value} onChange={props.onValueChange} {...props} />
+  },
+  CustomWidgetName: (props) => {
+    return <CustomWidget onChange={props.onValueChange} {...props} />
   }
 };
 

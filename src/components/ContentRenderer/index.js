@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useContext} from "react";
+import {FormContext} from "../Form/FormContext";
 
 const extractNames = (content, names = []) => {
   console.log(content);
@@ -13,11 +14,12 @@ const extractNames = (content, names = []) => {
 };
 
 export default {
-  Form: function (Content, formContext, content, options = {}) {
+  Form: function (Content, content, options = {}) {
     // console.log('back', formContext, content);
+    const context = useContext(FormContext);
 
     const handleOnContinue = () => {
-      console.log(formContext.getKeys());
+      console.log(context.getKeys());
     };
     return <div className="formBackground">
       <Content/>

@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import React from "react";
 
-export default function (data) {
+export const formContext = function (data) {
   const callbacks = [];
   let keys = _.clone(data);
 
@@ -18,4 +19,6 @@ export default function (data) {
   this.onChange = (callback) => {
     callbacks.push(callback);
   }
-}
+};
+
+export const FormContext = React.createContext();

@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import PropTypes from 'prop-types';
+import {FormContext} from "../../Form/FormContext";
 
-Building.propTypes = {};
+Building.propTypes = {
+  value: PropTypes.any,
+  onChange: PropTypes.func
+};
 
 const getValuesFromContext = (context, data) => {
   const allKeys = context.getKeys();
@@ -11,11 +15,11 @@ const getValuesFromContext = (context, data) => {
 };
 
 function Building(props) {
+  const context = useContext(FormContext);
+  const [values, setValues] = useState(getValuesFromContext(context, props.data));
 
-  const [values, setValues] = useState(getValuesFromContext(props.context, props.data));
-
-  props.context.onChange(() => {
-    setValues(getValuesFromContext(props.context, props.data));
+  context.onChange(() => {
+    setValues(getValuesFromContext(context, props.data));
   });
 
   return (

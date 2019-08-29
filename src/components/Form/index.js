@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import FormGen from "../FormGen";
 import PropTypes from 'prop-types';
-import FormContext from "./FormContext";
+import {FormContext} from "./FormContext";
 import {defaultData} from "../../services/settings/util";
 import _ from 'lodash';
 
@@ -13,16 +13,25 @@ Form.propTypes = {
 
 function Form(props) {
 
-  const data = _.extend(defaultData(props.content), props.init);
-
-  const formContext = new FormContext(data);
-  formContext.onChange((data) => {
-    props.onChange(data);
-  });
+  const keys = _.extend(defaultData(props.content), props.init);
+  let callbacks = [];
 
   return (
-    <FormGen formContext={formContext}
-             content={props.content}/>
+    <FormContext.Provider value={{
+      getKeys: function () {
+        return keys;
+      },
+      setKey: function (key, val) {
+        keys[key] = val;
+        callbacks.forEach(c => c(keys, key));
+        props.onChange(keys);
+      },
+      onChange: (callback) => {
+        callbacks = [...callbacks, callback];
+      }
+    }}>
+      <FormGen content={props.content}/>
+    </FormContext.Provider>
   );
 }
 
