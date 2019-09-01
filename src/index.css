@@ -1,7 +1,7 @@
 :root {
-  --main-bg-color: #eee9e4;
-  --error-message-color: red;
-  --base-color: #0000ff;
+    --main-bg-color: #eee9e4;
+    --error-message-color: red;
+    --base-color: black;
 }
 
 body {

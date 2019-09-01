@@ -4,6 +4,14 @@
 
 .col {
   display: flex;
+
+  &.spread {
+    justify-content: space-between;
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
 }
 
 .subContent {
@@ -11,7 +19,12 @@
 }
 
 .appContainer {
+  padding: 10px 30px;
   height: 100vh;
+}
+
+.heading {
+  font-weight: bolder;
 }
 
 .summary {
@@ -19,13 +32,24 @@
   padding: 10px;
   border: 1px solid var(--base-color);
   margin-right: 20px;
-
-  h4 {
-    margin: 0;
-  }
 }
 
 .formBackground {
-  background: #f7ddc3;
+  background: white;
   border: 1px solid var(--base-color);
+}
+
+button {
+  background: var(--base-color);
+  color: white;
+  padding: 0.5em 1em;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.smallMarginTop {
+  margin-top: 10px;
 }

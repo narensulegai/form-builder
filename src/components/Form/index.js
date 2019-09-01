@@ -13,13 +13,18 @@ Form.propTypes = {
 
 function Form(props) {
 
-  const keys = _.extend(defaultData(props.content), props.init);
+  let keys = _.extend(defaultData(props.content), props.init);
   let callbacks = [];
 
   return (
     <FormContext.Provider value={{
       getKeys: function () {
         return keys;
+      },
+      setKeys: function (newKeys) {
+        keys = {...keys, ...newKeys};
+        callbacks.forEach(c => c(keys));
+        props.onChange(keys);
       },
       setKey: function (key, val) {
         keys[key] = val;
@@ -28,6 +33,12 @@ function Form(props) {
       },
       onChange: (callback) => {
         callbacks = [...callbacks, callback];
+        return callbacks.length - 1;
+      },
+      deregister: (index) => {
+        //TODO:use map instead
+        callbacks[index] = () => {
+        };
       }
     }}>
       <FormGen content={props.content}/>

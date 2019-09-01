@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './index.scss';
 
@@ -32,7 +32,6 @@ InputBox.defaultProps = {
 };
 
 function InputBox(props) {
-
   const [error, setError] = useState(props.text === null ? null : validate(props.text, props.pattern));
 
   const handleTextChange = (e) => {
@@ -47,7 +46,7 @@ function InputBox(props) {
       <div>{props.label}</div>
       <input type={'text'}
              autoComplete="no-fill"
-             value={props.text || ''}
+             defaultValue={props.text}
              onChange={handleTextChange}/>
       <div className="err">{error}</div>
     </div>
