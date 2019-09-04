@@ -3,7 +3,18 @@ import Form from './components/Form';
 import {content} from './services/settings';
 import './App.scss';
 
-const dataFromDB = {};
+const dataFromDB = {
+  "BuildingDescription": [{
+    "BuildingDescription": "B1",
+    "StreetAddress": "Stree1",
+    "Suite": "Suite",
+    "City": "Bloare",
+    "State": "KA",
+    "ZipCode": "56004",
+    "Q1Text": null,
+    "Q1": true
+  }]
+};
 
 function App() {
 
@@ -14,7 +25,7 @@ function App() {
   };
 
   const handleOnSave = () => {
-    console.log(data)
+    console.log('App', data)
   };
 
   return (

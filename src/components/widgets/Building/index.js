@@ -1,10 +1,10 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {FormContext} from "../../Form/FormContext";
 
 Building.propTypes = {
-  value: PropTypes.any,
-  onChange: PropTypes.func
+  label: PropTypes.string,
+  summary: PropTypes.any
 };
 
 const getValuesFromContext = (context, data) => {
@@ -16,21 +16,27 @@ const getValuesFromContext = (context, data) => {
 
 function Building(props) {
   const context = useContext(FormContext);
-  const [values, setValues] = useState(getValuesFromContext(context, props.data));
-
-  context.onChange(() => {
-    setValues(getValuesFromContext(context, props.data));
+  const [values, setValues] = useState(getValuesFromContext(context, props.summary));
+  const callbackIndex = context.onChange(() => {
+    setValues(getValuesFromContext(context, props.summary));
   });
 
+  useEffect(() => {
+    return () => {
+      context.deregister(callbackIndex);
+    }
+  });
   return (
-    <div className="subContent">
-      <h4>{props.label}</h4>
-      {values.map((d, i) => {
-        return <div className="col" key={i}>
-          <div>{d.label}</div>
-          <i>&nbsp;&nbsp;{d.currValue}</i>
-        </div>
-      })}
+    <div className="summary">
+      <span className="heading">{props.label}</span>
+      <div className="col">
+        {values.map((d, i) => {
+          return <div key={i}>
+            <span>{d.label}</span>
+            <i>&nbsp;&nbsp;{d.currValue}&nbsp;&nbsp;</i>
+          </div>
+        })}
+      </div>
     </div>
   );
 }

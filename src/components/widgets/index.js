@@ -6,12 +6,11 @@ import {customWidgets} from './../../services/settings';
 import Form from "../Form";
 
 function WidgetWrapper(props) {
-
   const key = props.item.name;
   const showOn = props.item.showOn ? props.item.showOn : () => true;
   const context = useContext(FormContext);
   const [value, setValue] = useState(context.getKeys()[key]);
-  const [isVisible, setVisibility] = useState(showOn(context.getKeys()[key]));
+  const [isVisible, setVisibility] = useState(showOn(context.getKeys()));
   const onChange = (val) => {
     context.setKey(key, val)
   };
@@ -20,7 +19,7 @@ function WidgetWrapper(props) {
   // if (!props.isCustom) {
   const callbackIndex = context.onChange((keys) => {
     setValue(keys[key]);
-    setVisibility(showOn(context.getKeys()[key]));
+    setVisibility(showOn(context.getKeys()));
   });
   // }
   useEffect(() => {
@@ -30,7 +29,10 @@ function WidgetWrapper(props) {
   });
 
 
-  return isVisible ? React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options}) : null;
+  return isVisible ? React.createElement(props.Widget, {
+    value,
+    onValueChange: onChange, ...{options: props.item.options}
+  }) : null;
 }
 
 
@@ -48,6 +50,7 @@ function RepeatableWidgetWrapper(props) {
   return isVisible ? React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options}) : null;
 }
 
+//TODO:do we need isCustom?
 const wrapWidgets = (widgets, isCustom = false) => {
   const wrappedWidgets = {};
   for (let key in widgets) {
@@ -77,18 +80,46 @@ const wrapCustomWidgets = (customWidgets) => {
 //this value must be updated using onValueChange function
 const widgets = {
   EmailInputBox: (props) => {
-    return <InputBox text={props.value} pattern={'email'} onChange={props.onValueChange} {...props}/>;
+    return <InputBox text={props.value} pattern={'email'} onChange={props.onValueChange} {...props.options}/>;
   },
   InputBox: (props) => {
-    return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props}/>;
+    return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props.options}/>;
   },
-  BuildingSummary: (props) => {
-    console.log(props);
-    if (props.value) {
-      return <div>{props.value.BuildingDescription}</div>
-    }
-    return <div>Enter</div>;
+  Text: (props) => {
+    return <div>{props.label}&nbsp;{props.value}</div>;
+  },
+  Question: (props) => {
+    return <div className="ele">{props.options.text}</div>;
+  },
+  YesNo: (props) => {
+
+    const [isYes, setYes] = useState(props.value === null ? false : props.value);
+    const [isNo, setNo] = useState(props.value === null ? false : !props.value);
+
+    const onYes = () => {
+      setYes(true);
+      setNo(false);
+      props.onValueChange(true);
+    };
+
+    const onNo = () => {
+      setNo(true);
+      setYes(false);
+      props.onValueChange(false);
+    };
+
+    return <div className="ele">
+      <span>Yes</span>
+      &nbsp;<input type="radio"
+                   checked={isYes}
+                   onChange={onYes}/>
+      &nbsp;<span>No</span>
+      &nbsp;<input type="radio"
+                   checked={isNo}
+                   onChange={onNo}/>
+    </div>
   }
 };
 
-export default _.extend(wrapCustomWidgets(customWidgets), wrapWidgets(widgets));
+const allWidgets = _.extend(wrapCustomWidgets(customWidgets), wrapWidgets(widgets));
+export default allWidgets;
