@@ -41,12 +41,8 @@ export const customWidgets = {
               content: {
                 container: 'col',
                 items: [
-                  {
-                    name: 'State', widget: 'InputBox', options: {label: 'State'}
-                  },
-                  {
-                    name: 'ZipCode', widget: 'InputBox', options: {label: 'Zip Code'}
-                  }
+                  {name: 'State', widget: 'InputBox', options: {label: 'State'}},
+                  {name: 'ZipCode', widget: 'InputBox', options: {label: 'Zip Code'}}
                 ]
               }
             },
@@ -54,12 +50,19 @@ export const customWidgets = {
               content: {
                 container: 'row',
                 items: [
-                  {name:'Q1Text', widget: 'Question', options: {text: 'Q1. Is your building close to police station?'}, showOn: (data) => {
+                  {
+                    name: 'Q1Text',
+                    widget: 'Question',
+                    options: {text: 'Q1. Is your building close to police station?'},
+                    showOn: (data) => {
                       return data.BuildingDescription !== null;
-                    }},
-                  {name: 'Q1', widget: 'YesNo', options: {text: 'Q1. Is your building close to police station?'}, showOn: (data) => {
+                    }
+                  },
+                  {
+                    name: 'Q1', widget: 'YesNo', showOn: (data) => {
                       return data.BuildingDescription !== null;
-                    }}
+                    }
+                  }
                 ]
               }
             }
@@ -67,16 +70,23 @@ export const customWidgets = {
         }
       }
     ]
-  }
+  },
+  LocationWidget: {
+    container: 'row',
+    items: [
+      {name: 'Location', widget: 'InputBox', options: {label: 'Location'}},
+      {name: 'Building', widget: 'BuildingWidget', options: {}, isRepeatable: true},
+    ]
+  },
 };
 
 export const content = {
   container: 'row',
   items: [{
     content: {
-      container: 'col',
+      container: 'col demark',
       items: [
-        {name: 'BuildingDescription', widget: 'BuildingWidget', isRepeatable: true}
+        {name: 'LocationWithBuildings', widget: 'LocationWidget', isRepeatable: true}
       ]
     }
   }]
