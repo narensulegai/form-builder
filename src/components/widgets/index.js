@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import InputBox from "./InputBox";
 import {FormContext} from "../Form/FormContext";
 import _ from 'lodash';
-import {customWidgets} from './../../services/settings';
+import {customWidgets} from './../../services/settings/tenants/tenant2';
 import Form from "../Form";
 
 function WidgetWrapper(props) {
@@ -86,7 +86,7 @@ const widgets = {
     return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props.options}/>;
   },
   Text: (props) => {
-    return <div>{props.label}&nbsp;{props.value}</div>;
+    return <div className="ele">{props.options.text}</div>
   },
   Question: (props) => {
     return <div className="ele">{props.options.text}</div>;

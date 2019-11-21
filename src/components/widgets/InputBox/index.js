@@ -43,7 +43,7 @@ function InputBox(props) {
 
   return (
     <div className="formElement">
-      <div>{props.label}</div>
+      {props.label && <div>{props.label}</div>}
       <input type={'text'}
              autoComplete="no-fill"
              defaultValue={props.text}

@@ -28,7 +28,7 @@
 }
 
 .ele, .summary {
-  margin: 10px;
+  background: white;
   padding: 10px;
   border: 1px solid var(--base-color);
   margin-right: 20px;
@@ -39,8 +39,8 @@
 }
 
 .formBackground {
-  margin-top: 10px;
-  background: white;
+  margin: 20px;
+  background: var(--main-bg-color);
   border: 1px solid var(--base-color);
   padding: 10px;
 }
@@ -48,6 +48,7 @@
 .demark {
   padding: 10px;
   border: 1px solid var(--base-color);
+  background: white;
 }
 
 button {
