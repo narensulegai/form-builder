@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import InputBox from "./InputBox";
 import {FormContext} from "../Form/FormContext";
 import _ from 'lodash';
-import {customWidgets} from './../../services/settings/tenants/tenant2';
+import {customWidgets} from './../../services/settings/tenants/tenant1';
 import Form from "../Form";
 
 function WidgetWrapper(props) {
