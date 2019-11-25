@@ -53,7 +53,7 @@ export const customWidgets = {
                   {
                     name: 'Q1Text',
                     widget: 'Question',
-                    options: {text: 'Q1. Is your building close to police station?'},
+                    options: {text: 'Q1. Is your building close to hospital?'},
                     showOn: (data) => {
                       return data.BuildingDescription !== null;
                     }

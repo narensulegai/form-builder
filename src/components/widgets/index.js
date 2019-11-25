@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import InputBox from "./InputBox";
 import {FormContext} from "../Form/FormContext";
 import _ from 'lodash';
-import {customWidgets} from './../../services/settings/tenants/tenant1';
+import {customWidgets} from './../../services/settings/tenants/tenant2';
 import Form from "../Form";
 
 function WidgetWrapper(props) {
@@ -117,6 +117,43 @@ const widgets = {
       &nbsp;<input type="radio"
                    checked={isNo}
                    onChange={onNo}/>
+    </div>
+  },
+  YesNoText: (props) => {
+
+    const [isYes, setYes] = useState(props.value === null ? false : props.value);
+    const [isNo, setNo] = useState(props.value === null ? false : !props.value);
+
+    const onYes = () => {
+      setYes(true);
+      setNo(false);
+      props.onValueChange(true);
+    };
+
+    const onNo = () => {
+      setNo(true);
+      setYes(false);
+      props.onValueChange(false);
+    };
+    return <div className="ele col">
+      <div className="box" style={{background: isYes === true ? 'grey' : null}} onClick={onYes}>Yes</div>
+      <div className="box" style={{background: isNo === true ? 'grey' : null}} onClick={onNo}>No</div>
+    </div>
+  },
+  Bop: (props) => {
+    const options = props.options.options;
+    const [currentSelection, setSelection] = useState(props.value);
+    const select = (o) => {
+      setSelection(o);
+      props.onValueChange(o);
+    };
+    return <div className="ele col">
+      {options.map((o, i) => {
+        return <div key={i} className="box" style={{background: currentSelection === o ? 'grey' : null}}
+                    onClick={() => {
+                      select(o);
+                    }}>{o}</div>
+      })}
     </div>
   }
 };
