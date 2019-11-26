@@ -7,25 +7,25 @@ import {FormContext} from "../Form/FormContext";
 function ToList(props) {
   const context = useContext(FormContext);
   const name = props.item.name;
-  let contextList = context.getKeys()[name];
-
-  const [list, setList] = useState(contextList);
+  const [list, setList] = useState(context.getKeys()[name]);
 
   const handleOnAdd = () => {
     setList([...list, null]);
   };
 
-  const onChange = ((d) => {
+  const onChange = (d => {
+    console.log('onChange', d);
     context.setKey(name, d);
   });
 
   const listContextValue = {
-    getList: function () {
-      return contextList;
+    getList: () => {
+      console.log('getList', list);
+      return list;
     },
-    setEle: function (ele, i) {
-      contextList[i] = ele;
-      onChange(contextList);
+    setEle: (ele, i) => {
+      list[i] = ele;
+      onChange(list);
     }
   };
 
@@ -56,10 +56,8 @@ function withWidgetRenderer(item) {
   const Widget = widgets[item.widget](item);
   if (item.isRepeatable) {
     return <ToList Widget={Widget} item={item}/>
-  } else {
-    return Widget;
   }
-
+  return Widget;
 }
 
 function FormGen(props) {
