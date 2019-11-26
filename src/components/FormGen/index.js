@@ -14,13 +14,11 @@ function ToList(props) {
   };
 
   const onChange = (d => {
-    console.log('onChange', d);
     context.setKey(name, d);
   });
 
   const listContextValue = {
     getList: () => {
-      console.log('getList', list);
       return list;
     },
     setEle: (ele, i) => {
