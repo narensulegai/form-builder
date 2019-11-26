@@ -12,9 +12,9 @@ function ToList(props) {
   const handleOnAdd = () => {
     setList([...list, null]);
   };
-
-  const onChange = (d => {
-    context.setKey(name, d);
+  let callbacks = [];
+  const onChange = (l => {
+    context.setKey(name, l);
   });
 
   const listContextValue = {
@@ -23,7 +23,17 @@ function ToList(props) {
     },
     setEle: (ele, i) => {
       list[i] = ele;
+      callbacks.forEach(c => c(list));
       onChange(list);
+    },
+    onChange: (callback) => {
+      callbacks = [...callbacks, callback];
+      return callbacks.length - 1;
+    },
+    deregister: (index) => {
+      //TODO:use map instead
+      callbacks[index] = () => {
+      };
     }
   };
 

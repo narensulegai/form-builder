@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import InputBox from "./InputBox";
 import {FormContext} from "../Form/FormContext";
 import _ from 'lodash';
-import {customWidgets} from './../../services/settings/tenants/tenant2';
+import {customWidgets} from './../../services/settings/tenants/tenant3';
 import Form from "../Form";
 
 function WidgetWrapper(props) {
@@ -28,10 +28,10 @@ function WidgetWrapper(props) {
     };
   });
 
-
   return isVisible ? React.createElement(props.Widget, {
     value,
-    onValueChange: onChange, ...{options: props.item.options}
+    onValueChange: onChange,
+    options: props.item.options
   }) : null;
 }
 
@@ -40,14 +40,28 @@ function RepeatableWidgetWrapper(props) {
   const {index} = props;
   const showOn = props.item.showOn ? props.item.showOn : () => true;
   const context = useContext(FormContext);
-  const value = context.getList()[index];
+  const [value, setValue] = useState(context.getList()[index]);
   const isVisible = showOn(context.getList(), index);
+
+
+  const callbackIndex = context.onChange((list) => {
+    setValue(list[index]);
+  });
+  useEffect(() => {
+    return () => {
+      context.deregister(callbackIndex);
+    };
+  });
 
   const onChange = (val) => {
     context.setEle(val, index);
   };
 
-  return isVisible ? React.createElement(props.Widget, {value, onValueChange: onChange, ...props.item.options}) : null;
+  return isVisible ? React.createElement(props.Widget, {
+    value,
+    onValueChange: onChange,
+    options: props.item.options
+  }) : null;
 }
 
 //TODO:do we need isCustom?
@@ -120,7 +134,6 @@ const widgets = {
     </div>
   },
   YesNoText: (props) => {
-
     const [isYes, setYes] = useState(props.value === null ? false : props.value);
     const [isNo, setNo] = useState(props.value === null ? false : !props.value);
 

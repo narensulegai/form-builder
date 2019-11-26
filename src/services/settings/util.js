@@ -4,10 +4,9 @@ export const defaultData = (content) => {
     content.items.forEach((item) => {
       if (item.content) {
         initContent(item.content)
-      } else if (item.isRepeatable) {
-        data[item.name] = [null];
       } else {
-        data[item.name] = null;
+        // name field is mandatory
+        data[item.name] = item.isRepeatable ? [null] : null;
       }
     });
   };

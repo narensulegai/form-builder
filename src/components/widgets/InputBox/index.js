@@ -33,6 +33,7 @@ InputBox.defaultProps = {
 
 function InputBox(props) {
   const [error, setError] = useState(props.text === null ? null : validate(props.text, props.pattern));
+  const [value, setValue] = useState(props.text);
 
   const handleTextChange = (e) => {
     const text = e.target.value;
@@ -41,16 +42,18 @@ function InputBox(props) {
     setError(errMsg);
   };
 
-  return (
-    <div className="formElement">
-      {props.label && <div>{props.label}</div>}
-      <input type={'text'}
-             autoComplete="no-fill"
-             defaultValue={props.text}
-             onChange={handleTextChange}/>
-      <div className="err">{error}</div>
-    </div>
-  );
+  useEffect(() => {
+    setValue(props.text);
+  }, [props.text]);
+
+  return (<div className="formElement">
+    {props.label && <div>{props.label}</div>}
+    <input type={'text'}
+           autoComplete="no-fill"
+           value={value || ''}
+           onChange={handleTextChange}/>
+    <div className="err">{error}</div>
+  </div>);
 }
 
 export default InputBox;
