@@ -36,7 +36,7 @@ function ToList(props) {
       };
     }
   };
-
+  //TODO: dont use context - replace with object
   return <>
     {list.map((c, i) => {
       return <FormContext.Provider key={i} value={listContextValue}>
