@@ -88,6 +88,8 @@ export const widgets = {
   },
   GoogleAssist: (props) => {
     const inputEl = useRef(null);
+    const {exportNames} = props.options;
+
     useEffect(() => {
       const autocomplete = new window.google.maps.places.Autocomplete(inputEl.current, {
         types: ['establishment'],
@@ -98,13 +100,12 @@ export const widgets = {
       const autocompleteLsr = autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         place.photosUrl = (place.photos || []).map(p => {
-          return p.getUrl({maxHeight: 300})
+          return p.getUrl({maxHeight: 100})
         });
 
-        const {mapNames} = props.options;
 
-        for (let k in mapNames) {
-          props.onGlobalValueChange(mapNames[k], _.get(place, k, null));
+        for (let k in exportNames) {
+          props.onGlobalValueChange(exportNames[k], _.get(place, k, null));
         }
 
       });
@@ -115,9 +116,43 @@ export const widgets = {
       }
     });
 
+    const searchAgain = () => {
+      inputEl.current.value = '';
+      for (let k in exportNames) {
+        props.onGlobalValueChange(exportNames[k], null);
+      }
+      inputEl.current.focus();
+    };
+
+    const enterManually = () => {
+
+    };
 
     return <div className="formElement">
       <input ref={inputEl} type="text"/>
+      &nbsp;&nbsp;
+      <button onClick={searchAgain}>Search again</button>
+      &nbsp;&nbsp;
+      <a href='#' onClick={enterManually}>Enter manually</a>
     </div>
+  },
+  GoogleImages: (props) => {
+    useEffect(() => {
+      console.log('GoogleImages');
+    });
+    useEffect(() => {
+      console.log(props.globalValue);
+    }, []);
+    return <div>{props.value === null
+      ? null
+      : props.value.slice(0, 3).map((imgUrl, i) => {
+        return <img key={i} src={imgUrl}/>
+      })}
+    </div>;
+  },
+  GoogleRating: (props) => {
+    return props.value === null
+      ? null
+      : <div>{props.value}/5</div>
   }
 };

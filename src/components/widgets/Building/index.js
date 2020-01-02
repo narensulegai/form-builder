@@ -17,11 +17,11 @@ const getValuesFromContext = (context, data) => {
 function Building(props) {
   const context = useContext(FormContext);
   const [values, setValues] = useState(getValuesFromContext(context, props.summary));
-  const callbackIndex = context.onChange(() => {
-    setValues(getValuesFromContext(context, props.summary));
-  });
-
+  
   useEffect(() => {
+    const callbackIndex = context.onChange(() => {
+      setValues(getValuesFromContext(context, props.summary));
+    });
     return () => {
       context.deregister(callbackIndex);
     }

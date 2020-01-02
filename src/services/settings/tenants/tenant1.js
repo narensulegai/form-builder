@@ -19,14 +19,7 @@ export const customWidgets = {
           },
           container: 'row',
           items: [
-            {
-              content: {
-                container: 'col',
-                items: [
-                  {name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}}
-                ]
-              }
-            },
+            {name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}},
             {
               content: {
                 container: 'col',
@@ -81,13 +74,6 @@ export const customWidgets = {
 };
 
 export const content = {
-  container: 'row',
-  items: [{
-    content: {
-      container: 'col demark',
-      items: [
-        {name: 'LocationWithBuildings', widget: 'LocationWidget', isRepeatable: true}
-      ]
-    }
-  }]
+  container: 'row demark',
+  items: [{name: 'LocationWithBuildings', widget: 'LocationWidget', isRepeatable: true}]
 };
