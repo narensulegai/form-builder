@@ -6,7 +6,7 @@ export const defaultData = (content) => {
         initContent(item.content)
       } else {
         // name field is mandatory
-        data[item.name] = item.isRepeatable ? [null] : null;
+        data[item.name] = item.isRepeatable ? [null] : item.hasOwnProperty('defaultValue') ? item.defaultValue : null;
       }
     });
   };

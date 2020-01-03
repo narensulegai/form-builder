@@ -133,7 +133,7 @@ export const widgets = {
       &nbsp;&nbsp;
       <button onClick={searchAgain}>Search again</button>
       &nbsp;&nbsp;
-      <a href='#' onClick={enterManually}>Enter manually</a>
+      <button onClick={enterManually}>Enter manually</button>
     </div>
   },
   GoogleImages: (props) => {
@@ -146,7 +146,7 @@ export const widgets = {
     return <div>{props.value === null
       ? null
       : props.value.slice(0, 3).map((imgUrl, i) => {
-        return <img key={i} src={imgUrl}/>
+        return <img key={i} src={imgUrl} alt=""/>
       })}
     </div>;
   },
