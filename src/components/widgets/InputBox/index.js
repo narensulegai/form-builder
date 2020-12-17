@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import './index.scss';
+import TextField from '@material-ui/core/TextField';
 
 const patterns = {
   nonEmpty: {regx: /.+/g, message: 'Can\'t be empty'},
@@ -47,12 +47,19 @@ function InputBox(props) {
   }, [props.text]);
 
   return (<div className="formElement">
-    {props.label && <div>{props.label}</div>}
-    <input type={'text'}
-           autoComplete="no-fill"
-           value={value || ''}
-           onChange={handleTextChange}/>
-    <div className="err">{error}</div>
+    {/*{props.label && <div>{props.label}</div>}*/}
+    {/*<input type={'text'}*/}
+    {/*       autoComplete="no-fill"*/}
+    {/*       value={value || ''}*/}
+    {/*       onChange={handleTextChange}/>*/}
+    <TextField
+      error={error !== null}
+      label={props.label ? props.label : ''}
+      value={value === null ? '' : value}
+      onChange={handleTextChange}
+      variant="outlined"
+      helperText={error}
+    />
   </div>);
 }
 

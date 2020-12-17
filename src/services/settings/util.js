@@ -2,11 +2,11 @@ export const defaultData = (content) => {
   let data = {};
   const initContent = (content) => {
     content.items.forEach((item) => {
-      if (item.content) {
-        initContent(item.content)
-      } else {
-        // name field is mandatory
+      if (item.widget && item.name) {
         data[item.name] = item.isRepeatable ? [null] : item.hasOwnProperty('defaultValue') ? item.defaultValue : null;
+      }
+      if (item.content && !item.widget) {
+        initContent(item.content)
       }
     });
   };

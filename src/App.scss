@@ -1,5 +1,4 @@
 .row {
-  display: block;
 }
 
 .col {
@@ -29,9 +28,8 @@
 
 .ele, .summary {
   background: white;
-  padding: 10px;
   border: 1px solid var(--base-color);
-  margin-right: 20px;
+  margin-top: 5px;
 }
 
 .ele {
@@ -46,13 +44,15 @@
 }
 
 .demark {
+  margin-bottom: 20px;
   padding: 10px;
   border: 1px solid var(--base-color);
+  border-radius: 5px;
   background: white;
 }
 
 button {
-  margin: 10px 0;
+  margin-top: 10px;
   background: var(--base-color);
   color: white;
   padding: 0.5em 1em;
@@ -72,4 +72,29 @@ button {
   text-align: center;
   border: 1px solid black;
   margin-right: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.formElement {
+  color: var(--base-color);
+  flex: 1;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.err {
+  font-size: small;
+  color: var(--error-message-color);
+}
+
+img {
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.smallMarginLeft {
+  margin-left: 10px;
 }

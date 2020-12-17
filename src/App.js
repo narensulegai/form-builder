@@ -1,9 +1,11 @@
 import React from 'react';
 import Form from './components/Form';
-import {content} from './services/settings/tenants/tenant2';
+import {content} from './services/settings/tenants/tenant6';
 import './App.scss';
 
-const dataFromDB = {};
+const data = window.sessionStorage.getItem('data');
+// const data = null;
+const dataFromDB = data === null ? {} : JSON.parse(data);
 
 function App() {
 
@@ -14,7 +16,14 @@ function App() {
   };
 
   const handleOnSave = () => {
-    console.log('App', data)
+    console.log(data);
+    if (data === null) return;
+    const s = JSON.stringify(data);
+    window.sessionStorage.setItem('data', s);
+  };
+
+  const handleOnClear = () => {
+    window.sessionStorage.clear();
   };
 
   return (
@@ -25,6 +34,8 @@ function App() {
               init={dataFromDB}
               onChange={onChange}/>
 
+        <button onClick={handleOnClear}>Clear</button>
+        &nbsp;&nbsp;
         <button onClick={handleOnSave}>Save</button>
       </div>
     </div>

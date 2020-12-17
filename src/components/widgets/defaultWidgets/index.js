@@ -4,6 +4,9 @@
 import React, {useEffect, useState, useRef} from 'react';
 import InputBox from "./../InputBox";
 import _ from "lodash";
+import Form from '../../Form';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Typography from '@material-ui/core/Typography';
 
 export const widgets = {
   EmailInputBox: (props) => {
@@ -13,7 +16,9 @@ export const widgets = {
     return <InputBox text={props.value} pattern={'nonEmpty'} onChange={props.onValueChange} {...props.options}/>;
   },
   Text: (props) => {
-    return <div className="ele">{props.options.text}</div>
+    _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+    var text = _.template(props.options.text)(props.globalValue);
+    return <div className="ele">{text}</div>
   },
   Question: (props) => {
     return <div className="ele">{props.options.text}</div>;
@@ -103,11 +108,11 @@ export const widgets = {
           return p.getUrl({maxHeight: 100})
         });
 
-
+        const globalValues = {};
         for (let k in exportNames) {
-          props.onGlobalValueChange(exportNames[k], _.get(place, k, null));
+          globalValues[exportNames[k]] = _.get(place, k, null);
         }
-
+        props.onGlobalValueChange(globalValues);
       });
 
       return () => {
@@ -124,25 +129,12 @@ export const widgets = {
       inputEl.current.focus();
     };
 
-    const enterManually = () => {
-
-    };
-
     return <div className="formElement">
       <input ref={inputEl} type="text"/>
-      &nbsp;&nbsp;
-      <button onClick={searchAgain}>Search again</button>
-      &nbsp;&nbsp;
-      <button onClick={enterManually}>Enter manually</button>
+      <button className="smallMarginLeft" onClick={searchAgain}>Search</button>
     </div>
   },
   GoogleImages: (props) => {
-    useEffect(() => {
-      console.log('GoogleImages');
-    });
-    useEffect(() => {
-      console.log(props.globalValue);
-    }, []);
     return <div>{props.value === null
       ? null
       : props.value.slice(0, 3).map((imgUrl, i) => {
@@ -150,9 +142,123 @@ export const widgets = {
       })}
     </div>;
   },
-  GoogleRating: (props) => {
-    return props.value === null
-      ? null
-      : <div>{props.value}/5</div>
-  }
+  Journey: (props) => {
+    const [currentPage, setCurrentPage] = useState(props.value === null ? 0 : props.value.currentPage);
+    const [errors, setErrors] = useState(null);
+
+    const validatePage = () => {
+      const p = props.options.pages[currentPage];
+
+      return p.validate.reduce((m, v) => {
+        if (_.get(props.value[p.name], v.name, null) === null) {
+          m.push(v.errorMessage);
+        }
+        return m;
+      }, []);
+    };
+
+    const onNext = () => {
+      const errors = validatePage();
+      if (errors.length) {
+        setErrors(errors);
+      } else {
+        setErrors(null);
+        if (currentPage < props.options.pages.length - 1) {
+          const c = currentPage + 1;
+          setCurrentPage(c);
+          props.onValueChange({...props.value, ...{currentPage: c}});
+        }
+      }
+    };
+
+    const onBack = () => {
+      const errors = validatePage();
+      if (errors.length) {
+        setErrors(errors);
+      } else {
+        setErrors(null);
+        if (currentPage > 0) {
+          const c = currentPage - 1;
+          setCurrentPage(c);
+          props.onValueChange({...props.value, ...{currentPage: c}});
+        }
+      }
+    };
+
+    const onPageChange = (d, name) => {
+      const value = props.value === null ? {} : {...props.value};
+      value[name] = d;
+      props.onValueChange(value);
+    };
+
+    return <div>
+      <Breadcrumbs separator=">">
+        {props.options.pages.map((p, i) => {
+          return <Typography key={i} color={currentPage === i ? 'textPrimary' : 'textSecondary'}>{p.title}</Typography>
+        })}
+      </Breadcrumbs>
+
+      {errors === null
+        ? null
+        : errors.map((e, i) => <h5 key={i}>{e}</h5>)
+      }
+      {props.options.pages.map((p, i) => {
+        return <div key={i} className={i !== currentPage ? 'hide' : null}>
+          <Form init={props.value === null ? null : props.value[p.name]}
+                content={p.content}
+                onChange={(d) => {
+                  onPageChange(d, p.name)
+                }}/>
+        </div>
+      })}
+
+      <button onClick={onBack}>Back</button>
+      &nbsp;&nbsp;
+      <button onClick={onNext}>Next</button>
+
+    </div>
+  },
+  Summary: (props) => {
+    const [content, setContent] = useState(props.value === null ? null : props.value.content);
+    const [collapsed, setCollapsed] = useState(props.value === null ? false : props.value.collapsed);
+
+    props.onContentValueUpdate((d) => {
+      setContent(d);
+    });
+
+    const toggle = () => {
+      const c = !collapsed;
+      setCollapsed(c);
+      props.onValueChange({content: content, collapsed: c});
+    };
+
+    const handleOnSave = () => {
+      toggle();
+    };
+
+    const handleOnEdit = () => {
+      toggle();
+    };
+
+    return <div>
+      <div>
+        {collapsed
+          ? content !== null
+            ? <div>
+              <div>
+                {props.options.summary.map((s, i) => {
+                  return <div key={i}>{s.name}&nbsp;:&nbsp;{content[s.name]}</div>
+                })}
+              </div>
+              <div>
+                <button onClick={handleOnEdit}>Edit</button>
+              </div>
+            </div>
+            : null
+          : props.content
+        }
+      </div>
+      <button onClick={handleOnSave}>Save</button>
+    </div>
+  },
 };

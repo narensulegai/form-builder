@@ -1,34 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {FormContext} from "../Form/FormContext";
 import _ from 'lodash';
-import {customWidgets} from './../../services/settings/tenants/tenant2';
+import {customWidgets} from './../../services/settings/tenants/tenant6';
 import Form from "../Form";
 import {widgets} from "./defaultWidgets";
-
-const FormulaParser = require('hot-formula-parser').Parser;
-
-const evalShowOn = (showOn) => {
-  if (typeof showOn === 'function') {
-    return showOn;
-  }
-  if (typeof showOn === 'string') {
-    return (args) => {
-      const parser = new FormulaParser();
-      parser.setFunction('LENGTH', (params) => {
-        return params[0].length;
-      });
-      for (let key in args) {
-        parser.setVariable(key, args[key]);
-      }
-      const res = parser.parse(showOn);
-      if (res.error !== null) {
-        console.error('Something went wrong while parsing formula', parser);
-      }
-      return res.result;
-    }
-  }
-  return () => true;
-};
+import {evalShowOn} from "../../util/common";
 
 /**
  * @return {null}
@@ -43,10 +19,12 @@ function WidgetWrapper({item, Widget}) {
   const [globalValue, setGlobalValue] = useState(keys);
   const [isVisible, setVisibility] = useState(showOn(keys));
 
+  let onContentValueChangeCallback = null;
+
   useEffect(() => {
     const callbackIndex = context.onChange(keys => {
       setValue(keys[key]);
-      setGlobalValue(keys);
+      setGlobalValue({...keys});
       setVisibility(showOn(keys));
     });
     return () => {
@@ -57,8 +35,16 @@ function WidgetWrapper({item, Widget}) {
   const onValueChange = (val) => {
     context.setKey(key, val);
   };
-  const onGlobalValueChange = (key, val) => {
-    context.setKey(key, val);
+  const onGlobalValueChange = (keys) => {
+    context.setKeys(keys);
+  };
+
+  const onContentValueUpdate = (c) => {
+    onContentValueChangeCallback = c;
+  };
+
+  const handleOnFormChange = (d) => {
+    onContentValueChangeCallback(d)
   };
 
   return isVisible
@@ -66,7 +52,13 @@ function WidgetWrapper({item, Widget}) {
               globalValue={globalValue}
               onValueChange={onValueChange}
               onGlobalValueChange={onGlobalValueChange}
-              options={item.options}/>
+              onContentValueUpdate={onContentValueUpdate}
+              content={item.hasOwnProperty('content')
+                ? <Form content={item.content} init={value === null ? null : value.content}
+                        onChange={handleOnFormChange}/>
+                : null}
+              options={item.options}>
+    </Widget>
     : null;
 }
 
@@ -113,11 +105,11 @@ const wrapCustomWidgets = (customWidgets) => {
   const wrappedCustomWidgets = {};
   for (const key in customWidgets) {
     const content = customWidgets[key];
-    wrappedCustomWidgets[key] = function (props) {
-      return <Form content={content} init={props.value} onChange={props.onValueChange} {...props} />
+    wrappedCustomWidgets[key] = (props) => {
+      return <Form content={content} init={props.value} onChange={props.onValueChange}/>
     }
   }
-  return wrapWidgets(wrappedCustomWidgets, true);
+  return wrapWidgets(wrappedCustomWidgets);
 };
 
 const allWidgets = _.extend(wrapCustomWidgets(customWidgets), wrapWidgets(widgets));

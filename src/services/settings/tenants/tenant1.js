@@ -4,19 +4,6 @@ export const customWidgets = {
     items: [
       {
         content: {
-          renderer: {
-            type: 'Form', options: {
-              validate: ['BuildingDescription'],
-              label: 'Building Summary',
-              summary: [
-                {label: 'Street Address', value: 'StreetAddress'},
-                {label: 'Suite', value: 'Suite'},
-                {label: 'City', value: 'City'},
-                {label: 'Zip Code', value: 'ZipCode'},
-                {label: 'State', value: 'State'}
-              ]
-            }
-          },
           container: 'row',
           items: [
             {name: 'BuildingDescription', widget: 'InputBox', options: {label: 'Building description'}},

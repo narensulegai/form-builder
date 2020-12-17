@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import widgets from '../widgets';
-import ContentRenderer from '../ContentRenderer'
 import {FormContext} from "../Form/FormContext";
 
 function ToList(props) {
@@ -55,9 +54,7 @@ FormGen.propTypes = {
 };
 
 function withContentRenderer(content) {
-  return content.renderer
-    ? ContentRenderer[content.renderer.type](content)
-    : <FormGen content={content}/>;
+  return <FormGen content={content}/>;
 }
 
 function withWidgetRenderer(item) {
@@ -68,19 +65,27 @@ function withWidgetRenderer(item) {
   return Widget;
 }
 
+// {
+//   return <div key={j}>{
+//     item.hasOwnProperty('content')
+//       ? item.hasOwnProperty('widget') ? withWidgetRenderer(item) : withContentRenderer(item.content)
+//       : withWidgetRenderer(item)}
+//   </div>
+// }
+
 function FormGen(props) {
   return (
-    <div className={`${props.content.container}`}>
+    <div className={props.content.hasOwnProperty('container') ? props.content.container : null}>
       {props.content.items.map((item, j) => {
-          return <div key={j}>{
-            item.content
-              ? withContentRenderer(item.content)
-              : withWidgetRenderer(item)}
-          </div>
-        }
-      )}
-    </div>
-  );
+        return <div key={j}>
+          {
+            item.hasOwnProperty('widget')
+              ? withWidgetRenderer(item)
+              : withContentRenderer(item.content)
+          }
+        </div>
+      })}
+    </div>);
 }
 
 export default FormGen;
