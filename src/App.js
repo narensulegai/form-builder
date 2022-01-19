@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from './components/Form';
-import {content} from './services/settings/tenants/tenant6';
+import {content} from './services/settings/tenants/tenant2';
 import './App.scss';
 
 const data = window.sessionStorage.getItem('data');
